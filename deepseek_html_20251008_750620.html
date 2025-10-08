@@ -1,0 +1,3145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МВД РФ | Служебный портал</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #0f766e;
+            --accent: #ef4444;
+            --accent-dark: #dc2626;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --border: #cbd5e1;
+            --sidebar: #1e293b;
+            --sidebar-hover: #334155;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar);
+            color: white;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: var(--primary-light);
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .menu-item {
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background: var(--sidebar-hover);
+        }
+        
+        .menu-item.active {
+            background: var(--sidebar-hover);
+            border-left: 3px solid var(--primary-light);
+        }
+        
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .top-bar {
+            background: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+        
+        .current-date {
+            font-weight: 500;
+            color: var(--gray);
+        }
+        
+        .game-day-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .game-day-control input {
+            width: 80px;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .content-area {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        /* Password Prompt */
+        .password-prompt {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .password-card {
+            background: white;
+            color: var(--dark);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .password-card h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .password-input {
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+        
+        /* Common Component Styles */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-danger {
+            background: var(--accent);
+        }
+        
+        .btn-danger:hover {
+            background: var(--accent-dark);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            background: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        tr:hover {
+            background: var(--light);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-buttons .btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--light-gray);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .search-box {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .search-box input {
+            padding-left: 40px;
+        }
+        
+        .accordion {
+            margin-bottom: 1rem;
+        }
+        
+        .accordion-header {
+            background: var(--light);
+            padding: 1rem;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        
+        .accordion-header:hover {
+            background: #e2e8f0;
+        }
+        
+        .accordion-content {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+        }
+        
+        .codex-section {
+            margin-bottom: 1rem;
+        }
+        
+        .codex-item {
+            padding: 0.75rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.2s;
+        }
+        
+        .codex-item:hover {
+            background: var(--light);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .flex {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .flex-1 {
+            flex: 1;
+        }
+        
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .category {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .form-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .history-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .report-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .report-meta {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        .report-content {
+            margin-bottom: 1rem;
+        }
+        
+        .report-section {
+            margin-bottom: 1rem;
+        }
+        
+        .report-label {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .report-value {
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+            }
+            
+            .menu-item {
+                white-space: nowrap;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+            
+            .menu-item.active {
+                border-left: none;
+                border-bottom: 3px solid var(--primary-light);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .flex {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="password-prompt" id="password-prompt">
+        <div class="password-card">
+            <h2><i class="fas fa-shield-alt"></i> Служебный портал МВД</h2>
+            <p>Для доступа к системе введите пароль:</p>
+            <div class="form-group password-input">
+                <input type="password" id="service-password" placeholder="Пароль">
+            </div>
+            <button class="btn" id="login-btn"><i class="fas fa-sign-in-alt"></i> Войти в систему</button>
+            <div id="password-error" class="alert alert-error hidden">
+                <i class="fas fa-exclamation-circle"></i> Неверный пароль!
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container hidden" id="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>МВД РФ</span>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Главная панель</span>
+                </div>
+                <div class="menu-item" data-section="actions">
+                    <i class="fas fa-database"></i>
+                    <span>Реестр действий</span>
+                </div>
+                <div class="menu-item" data-section="licenses">
+                    <i class="fas fa-id-card"></i>
+                    <span>Водительские удостоверения</span>
+                </div>
+                <div class="menu-item" data-section="reports">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Отчеты</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="current-date">04 августа 2025 года</div>
+                <div class="game-day-control">
+                    <span>Игровой день:</span>
+                    <input type="number" id="current-game-day" value="1" min="0" max="10000">
+                    <button class="btn btn-outline" id="update-game-day-btn">
+                        <i class="fas fa-sync-alt"></i> Обновить
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <div class="content-section active" id="dashboard-section">
+                    <h1 class="section-title"><i class="fas fa-tachometer-alt"></i> Главная панель</h1>
+                    
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-actions">0</div>
+                            <div class="stat-label">Всего действий</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-licenses">0</div>
+                            <div class="stat-label">ВУ в базе</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="active-licenses">0</div>
+                            <div class="stat-label">Действующих ВУ</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="expired-licenses">0</div>
+                            <div class="stat-label">Просроченных ВУ</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Быстрые действия</h2>
+                        </div>
+                        <div class="flex">
+                            <button class="btn" id="new-vehicle-action-btn">
+                                <i class="fas fa-car"></i> Остановка ТС
+                            </button>
+                            <button class="btn" id="new-pedestrian-action-btn">
+                                <i class="fas fa-user"></i> Оформление пешего
+                            </button>
+                            <button class="btn" id="new-arrest-action-btn">
+                                <i class="fas fa-handcuffs"></i> Оформление ареста
+                            </button>
+                            <button class="btn" id="new-accident-action-btn">
+                                <i class="fas fa-car-crash"></i> Оформление ДТП
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Последние действия</h2>
+                            <button class="btn btn-outline" id="view-all-actions-btn">
+                                <i class="fas fa-list"></i> Все действия
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table id="recent-actions-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Дата</th>
+                                        <th>Тип</th>
+                                        <th>Действие</th>
+                                        <th>Объект</th>
+                                        <th>Инспектор</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Данные будут заполняться через JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="recent-actions-empty-state" class="empty-state hidden">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h3>Нет действий</h3>
+                            <p>Совершите первое действие с помощью кнопок выше.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Actions Section -->
+                <div class="content-section" id="actions-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="section-title"><i class="fas fa-database"></i> Реестр служебных действий</h2>
+                            <div class="flex">
+                                <div class="form-group">
+                                    <select id="action-type">
+                                        <option value="vehicle">Остановка ТС</option>
+                                        <option value="pedestrian">Оформление пешего</option>
+                                        <option value="arrest">Оформление ареста</option>
+                                        <option value="accident">Оформление ДТП</option>
+                                    </select>
+                                </div>
+                                <button class="btn" id="new-action-btn"><i class="fas fa-plus"></i> Создать действие</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Форма для оформления ТС -->
+                        <div id="vehicle-form" class="hidden">
+                            <form id="vehicle-action-form">
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-car"></i> Остановка транспортного средства</h3>
+                                    <div class="form-group">
+                                        <label for="action-id">Уникальный номер записи</label>
+                                        <input type="text" id="action-id" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="action-type-select">Действие *</label>
+                                        <select id="action-type-select" required>
+                                            <option value="">Выберите действие</option>
+                                            <option value="stop">Остановка Т/С</option>
+                                            <option value="fine">Административный штраф</option>
+                                            <option value="license-revoke">Лишение водительского удостоверения</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group" id="fine-amount-container" style="display: none;">
+                                        <label for="fine-amount">Сумма штрафа *</label>
+                                        <input type="number" id="fine-amount" min="0">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-gavel"></i> Причина / Статья</h3>
+                                    <div class="form-group">
+                                        <div class="accordion">
+                                            <div class="accordion-header" id="codex-accordion-header">
+                                                <span><i class="fas fa-book"></i> Выбрать из кодексов</span>
+                                                <span>▼</span>
+                                            </div>
+                                            <div class="accordion-content" id="codex-accordion-content" style="display: none;">
+                                                <div class="search-box">
+                                                    <i class="fas fa-search"></i>
+                                                    <input type="text" id="codex-search" placeholder="Поиск статьи...">
+                                                </div>
+                                                
+                                                <div class="codex-section">
+                                                    <h4>Дорожный кодекс РФ</h4>
+                                                    <div id="dk-list">
+                                                        <!-- Список статей ДК будет заполнен через JavaScript -->
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="codex-section">
+                                                    <h4>Кодекс об административных правонарушениях РФ</h4>
+                                                    <div id="koap-list">
+                                                        <!-- Список статей КОАП будет заполнен через JavaScript -->
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="codex-section">
+                                                    <h4>Уголовный кодекс РФ</h4>
+                                                    <div id="uk-list">
+                                                        <!-- Список статей УК будет заполнен через JavaScript -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" id="reason" required placeholder="Статья и описание нарушения">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="custom-reason">Дополнительная информация</label>
+                                        <input type="text" id="custom-reason" placeholder="Дополнительные сведения">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-car-side"></i> Сведения о транспортном средстве</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="vehicle-brand">Марка *</label>
+                                            <input type="text" id="vehicle-brand" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="vehicle-model">Модель *</label>
+                                            <input type="text" id="vehicle-model" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="vehicle-color">Цвет *</label>
+                                            <input type="text" id="vehicle-color" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="vehicle-plate">Госномер *</label>
+                                            <input type="text" id="vehicle-plate" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="vehicle-ownership">Тип владения *</label>
+                                        <select id="vehicle-ownership" required>
+                                            <option value="">Выберите тип</option>
+                                            <option value="personal">Личное</option>
+                                            <option value="rental">Арендованное</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-user"></i> Сведения о водителе</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="owner-name">Имя *</label>
+                                            <input type="text" id="owner-name" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="owner-patronymic">Отчество *</label>
+                                            <input type="text" id="owner-patronymic" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="owner-passport">№ Паспорта *</label>
+                                        <input type="text" id="owner-passport" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="owner-license">Водительское удостоверение</label>
+                                        <div class="flex">
+                                            <input type="text" id="owner-license" class="flex-1">
+                                            <button type="button" class="btn" id="check-license-btn"><i class="fas fa-search"></i> Проверить ВУ</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="license-check-result"></div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Дата и инспектор</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="action-date">Дата (ДД.ММ.ГГ) *</label>
+                                            <input type="text" id="action-date" placeholder="ДД.ММ.ГГ" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="game-day">Игровой день *</label>
+                                            <input type="number" id="game-day" min="0" max="10000" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="inspector-name">Инспектор *</label>
+                                        <input type="text" id="inspector-name" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn"><i class="fas fa-save"></i> Сохранить действие</button>
+                                    <button type="button" class="btn btn-danger" id="cancel-action-btn"><i class="fas fa-times"></i> Отмена</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Форма для оформления пешего гражданина -->
+                        <div id="pedestrian-form" class="hidden">
+                            <form id="pedestrian-action-form">
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-user"></i> Оформление пешего гражданина</h3>
+                                    <div class="form-group">
+                                        <label for="pedestrian-action-id">Уникальный номер записи</label>
+                                        <input type="text" id="pedestrian-action-id" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="pedestrian-action-type">Действие *</label>
+                                        <select id="pedestrian-action-type" required>
+                                            <option value="">Выберите действие</option>
+                                            <option value="check">Проверка документов</option>
+                                            <option value="fine">Административный штраф</option>
+                                            <option value="warning">Предупреждение</option>
+                                            <option value="detain">Задержание</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group" id="pedestrian-fine-amount-container" style="display: none;">
+                                        <label for="pedestrian-fine-amount">Сумма штрафа *</label>
+                                        <input type="number" id="pedestrian-fine-amount" min="0">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-gavel"></i> Причина / Статья</h3>
+                                    <div class="form-group">
+                                        <div class="accordion">
+                                            <div class="accordion-header" id="pedestrian-codex-accordion-header">
+                                                <span><i class="fas fa-book"></i> Выбрать из кодексов</span>
+                                                <span>▼</span>
+                                            </div>
+                                            <div class="accordion-content" id="pedestrian-codex-accordion-content" style="display: none;">
+                                                <div class="search-box">
+                                                    <i class="fas fa-search"></i>
+                                                    <input type="text" id="pedestrian-codex-search" placeholder="Поиск статьи...">
+                                                </div>
+                                                
+                                                <div class="codex-section">
+                                                    <h4>Кодекс об административных правонарушениях РФ</h4>
+                                                    <div id="pedestrian-koap-list">
+                                                        <!-- Список статей КОАП будет заполнен через JavaScript -->
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="codex-section">
+                                                    <h4>Уголовный кодекс РФ</h4>
+                                                    <div id="pedestrian-uk-list">
+                                                        <!-- Список статей УК будет заполнен через JavaScript -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" id="pedestrian-reason" required placeholder="Статья и описание нарушения">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="pedestrian-custom-reason">Дополнительная информация</label>
+                                        <input type="text" id="pedestrian-custom-reason" placeholder="Дополнительные сведения">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-user"></i> Сведения о гражданине</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="pedestrian-name">Имя *</label>
+                                            <input type="text" id="pedestrian-name" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="pedestrian-patronymic">Отчество *</label>
+                                            <input type="text" id="pedestrian-patronymic" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="pedestrian-passport">№ Паспорта *</label>
+                                        <input type="text" id="pedestrian-passport" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="pedestrian-address">Адрес проживания</label>
+                                        <input type="text" id="pedestrian-address">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="pedestrian-description">Приметы</label>
+                                        <textarea id="pedestrian-description" rows="3" placeholder="Описание внешности, одежды и т.д."></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Дата и инспектор</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="pedestrian-action-date">Дата (ДД.ММ.ГГ) *</label>
+                                            <input type="text" id="pedestrian-action-date" placeholder="ДД.ММ.ГГ" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="pedestrian-game-day">Игровой день *</label>
+                                            <input type="number" id="pedestrian-game-day" min="0" max="10000" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="pedestrian-inspector-name">Инспектор *</label>
+                                        <input type="text" id="pedestrian-inspector-name" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn"><i class="fas fa-save"></i> Сохранить действие</button>
+                                    <button type="button" class="btn btn-danger" id="cancel-pedestrian-action-btn"><i class="fas fa-times"></i> Отмена</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Форма для оформления ареста -->
+                        <div id="arrest-form" class="hidden">
+                            <form id="arrest-action-form">
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-handcuffs"></i> Оформление ареста</h3>
+                                    <div class="form-group">
+                                        <label for="arrest-action-id">Уникальный номер записи</label>
+                                        <input type="text" id="arrest-action-id" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-type">Тип ареста *</label>
+                                        <select id="arrest-type" required>
+                                            <option value="">Выберите тип</option>
+                                            <option value="administrative">Административный арест</option>
+                                            <option value="criminal">Уголовный арест</option>
+                                            <option value="preventive">Превентивный арест</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-duration">Срок ареста *</label>
+                                        <input type="text" id="arrest-duration" required placeholder="Например: 15 суток, до суда">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-gavel"></i> Основание для ареста</h3>
+                                    <div class="form-group">
+                                        <div class="accordion">
+                                            <div class="accordion-header" id="arrest-codex-accordion-header">
+                                                <span><i class="fas fa-book"></i> Выбрать из кодексов</span>
+                                                <span>▼</span>
+                                            </div>
+                                            <div class="accordion-content" id="arrest-codex-accordion-content" style="display: none;">
+                                                <div class="search-box">
+                                                    <i class="fas fa-search"></i>
+                                                    <input type="text" id="arrest-codex-search" placeholder="Поиск статьи...">
+                                                </div>
+                                                
+                                                <div class="codex-section">
+                                                    <h4>Кодекс об административных правонарушениях РФ</h4>
+                                                    <div id="arrest-koap-list">
+                                                        <!-- Список статей КОАП будет заполнен через JavaScript -->
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="codex-section">
+                                                    <h4>Уголовный кодекс РФ</h4>
+                                                    <div id="arrest-uk-list">
+                                                        <!-- Список статей УК будет заполнен через JavaScript -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" id="arrest-reason" required placeholder="Статья и описание нарушения">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-custom-reason">Дополнительная информация</label>
+                                        <textarea id="arrest-custom-reason" rows="3" placeholder="Обстоятельства дела, дополнительные факты"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-user"></i> Сведения о задерживаемом</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="arrest-name">Имя *</label>
+                                            <input type="text" id="arrest-name" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="arrest-patronymic">Отчество *</label>
+                                            <input type="text" id="arrest-patronymic" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-passport">№ Паспорта *</label>
+                                        <input type="text" id="arrest-passport" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-address">Адрес проживания</label>
+                                        <input type="text" id="arrest-address">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-description">Приметы</label>
+                                        <textarea id="arrest-description" rows="3" placeholder="Описание внешности, одежды и т.д."></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-map-marker-alt"></i> Место и обстоятельства</h3>
+                                    <div class="form-group">
+                                        <label for="arrest-location">Место задержания *</label>
+                                        <input type="text" id="arrest-location" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-circumstances">Обстоятельства задержания</label>
+                                        <textarea id="arrest-circumstances" rows="3" placeholder="Подробное описание обстоятельств задержания"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-evidence">Изъятые доказательства</label>
+                                        <textarea id="arrest-evidence" rows="3" placeholder="Описание изъятых предметов, доказательств"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Дата и инспектор</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="arrest-action-date">Дата (ДД.ММ.ГГ) *</label>
+                                            <input type="text" id="arrest-action-date" placeholder="ДД.ММ.ГГ" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="arrest-game-day">Игровой день *</label>
+                                            <input type="number" id="arrest-game-day" min="0" max="10000" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="arrest-inspector-name">Инспектор *</label>
+                                        <input type="text" id="arrest-inspector-name" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn"><i class="fas fa-save"></i> Сохранить протокол ареста</button>
+                                    <button type="button" class="btn btn-danger" id="cancel-arrest-action-btn"><i class="fas fa-times"></i> Отмена</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Форма для оформления ДТП -->
+                        <div id="accident-form" class="hidden">
+                            <form id="accident-action-form">
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-car-crash"></i> Оформление ДТП</h3>
+                                    <div class="form-group">
+                                        <label for="accident-action-id">Уникальный номер записи</label>
+                                        <input type="text" id="accident-action-id" readonly>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="accident-severity">Тяжесть ДТП *</label>
+                                        <select id="accident-severity" required>
+                                            <option value="">Выберите тяжесть</option>
+                                            <option value="light">Легкое (без пострадавших)</option>
+                                            <option value="medium">Среднее (есть пострадавшие)</option>
+                                            <option value="severe">Тяжелое (есть погибшие)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="accident-type">Тип ДТП *</label>
+                                        <select id="accident-type" required>
+                                            <option value="">Выберите тип</option>
+                                            <option value="collision">Столкновение</option>
+                                            <option value="rollover">Опрокидывание</option>
+                                            <option value="pedestrian">Наезд на пешехода</option>
+                                            <option value="obstacle">Наезд на препятствие</option>
+                                            <option value="other">Иной вид ДТП</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-map-marker-alt"></i> Место и время ДТП</h3>
+                                    <div class="form-group">
+                                        <label for="accident-location">Место ДТП *</label>
+                                        <input type="text" id="accident-location" required placeholder="Улица, район, километр трассы">
+                                    </div>
+                                    
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="accident-action-date">Дата (ДД.ММ.ГГ) *</label>
+                                            <input type="text" id="accident-action-date" placeholder="ДД.ММ.ГГ" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="accident-time">Время *</label>
+                                            <input type="text" id="accident-time" placeholder="ЧЧ:ММ" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="accident-game-day">Игровой день *</label>
+                                        <input type="number" id="accident-game-day" min="0" max="10000" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-car"></i> Участники ДТП</h3>
+                                    <div id="accident-participants">
+                                        <div class="participant-section">
+                                            <h4>Участник 1</h4>
+                                            <div class="flex">
+                                                <div class="form-group flex-1">
+                                                    <label for="participant1-name">Имя *</label>
+                                                    <input type="text" id="participant1-name" required>
+                                                </div>
+                                                <div class="form-group flex-1">
+                                                    <label for="participant1-patronymic">Отчество *</label>
+                                                    <input type="text" id="participant1-patronymic" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="participant1-vehicle">Транспортное средство</label>
+                                                <input type="text" id="participant1-vehicle" placeholder="Марка, модель, госномер">
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="participant1-role">Роль в ДТП *</label>
+                                                <select id="participant1-role" required>
+                                                    <option value="">Выберите роль</option>
+                                                    <option value="driver">Водитель</option>
+                                                    <option value="pedestrian">Пешеход</option>
+                                                    <option value="passenger">Пассажир</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-group">
+                                                <label for="participant1-violations">Нарушения ПДД</label>
+                                                <textarea id="participant1-violations" rows="2" placeholder="Выявленные нарушения"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="button" class="btn" id="add-participant-btn"><i class="fas fa-plus"></i> Добавить участника</button>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-file-alt"></i> Описание ДТП</h3>
+                                    <div class="form-group">
+                                        <label for="accident-description">Обстоятельства ДТП *</label>
+                                        <textarea id="accident-description" rows="4" required placeholder="Подробное описание произошедшего"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="accident-damages">Повреждения ТС и другого имущества</label>
+                                        <textarea id="accident-damages" rows="3" placeholder="Описание повреждений"></textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="accident-injuries">Сведения о пострадавших</label>
+                                        <textarea id="accident-injuries" rows="3" placeholder="Информация о пострадавших, характере травм"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-user"></i> Инспектор</h3>
+                                    <div class="form-group">
+                                        <label for="accident-inspector-name">Инспектор, составивший протокол *</label>
+                                        <input type="text" id="accident-inspector-name" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn"><i class="fas fa-save"></i> Сохранить протокол ДТП</button>
+                                    <button type="button" class="btn btn-danger" id="cancel-accident-action-btn"><i class="fas fa-times"></i> Отмена</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Таблица с историей действий -->
+                        <div class="history-controls">
+                            <h3 class="card-title"><i class="fas fa-list"></i> История действий</h3>
+                            <button class="btn btn-danger" id="clear-history-btn"><i class="fas fa-trash"></i> Очистить историю</button>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table id="actions-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Дата</th>
+                                        <th>Тип</th>
+                                        <th>Действие</th>
+                                        <th>Статья</th>
+                                        <th>Объект</th>
+                                        <th>Инспектор</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Данные будут заполняться через JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="actions-empty-state" class="empty-state hidden">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h3>Нет записей о действиях</h3>
+                            <p>Начните работу, создав новое действие с помощью кнопки выше.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Licenses Section -->
+                <div class="content-section" id="licenses-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="section-title"><i class="fas fa-id-card"></i> Реестр водительских удостоверений</h2>
+                            <div class="flex">
+                                <button class="btn" id="add-license-btn"><i class="fas fa-plus"></i> Добавить ВУ</button>
+                                <div class="form-group">
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" id="license-search" placeholder="Поиск по номеру ВУ или паспорта...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Форма добавления/редактирования ВУ -->
+                        <div id="license-form" class="hidden">
+                            <form id="license-data-form">
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-info-circle"></i> Основные данные</h3>
+                                    <div class="form-group">
+                                        <label for="license-id">Уникальный номер ВУ</label>
+                                        <input type="text" id="license-id" readonly>
+                                    </div>
+                                    
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="license-name">Имя *</label>
+                                            <input type="text" id="license-name" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="license-patronymic">Отчество *</label>
+                                            <input type="text" id="license-patronymic" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="license-passport">№ Паспорта *</label>
+                                        <input type="text" id="license-passport" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="license-number">№ Водительского удостоверения *</label>
+                                        <input type="text" id="license-number" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-calendar-check"></i> Срок действия</h3>
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="license-issue-date">Дата выдачи (ДД.ММ.ГГ) *</label>
+                                            <input type="text" id="license-issue-date" placeholder="ДД.ММ.ГГ" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="license-issue-game-day">Игровой день выдачи *</label>
+                                            <input type="number" id="license-issue-game-day" min="0" max="10000" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex">
+                                        <div class="form-group flex-1">
+                                            <label for="license-valid-date">Действительно до (ДД.ММ.ГГ) *</label>
+                                            <input type="text" id="license-valid-date" placeholder="ДД.ММ.ГГ" required>
+                                        </div>
+                                        <div class="form-group flex-1">
+                                            <label for="license-valid-game-day">Игровой день окончания *</label>
+                                            <input type="number" id="license-valid-game-day" min="0" max="10000" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h3 class="card-title"><i class="fas fa-cogs"></i> Дополнительные сведения</h3>
+                                    <div class="form-group">
+                                        <label>Категории *</label>
+                                        <div class="categories">
+                                            <label><input type="checkbox" name="license-category" value="A"> A</label>
+                                            <label><input type="checkbox" name="license-category" value="A1"> A1</label>
+                                            <label><input type="checkbox" name="license-category" value="M"> M</label>
+                                            <label><input type="checkbox" name="license-category" value="B"> B</label>
+                                            <label><input type="checkbox" name="license-category" value="B1"> B1</label>
+                                            <label><input type="checkbox" name="license-category" value="C"> C</label>
+                                            <label><input type="checkbox" name="license-category" value="D"> D</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="license-status">Статус</label>
+                                        <select id="license-status">
+                                            <option value="active">Действительно</option>
+                                            <option value="inactive">Недействительно</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn"><i class="fas fa-save"></i> Сохранить ВУ</button>
+                                    <button type="button" class="btn btn-danger" id="cancel-license-btn"><i class="fas fa-times"></i> Отмена</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Таблица с ВУ -->
+                        <div class="table-container">
+                            <table id="licenses-table">
+                                <thead>
+                                    <tr>
+                                        <th>№ ВУ</th>
+                                        <th>Владелец</th>
+                                        <th>№ Паспорта</th>
+                                        <th>Дата выдачи</th>
+                                        <th>Действительно до</th>
+                                        <th>Категории</th>
+                                        <th>Статус</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Данные будут заполняться через JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="licenses-empty-state" class="empty-state hidden">
+                            <i class="fas fa-id-card"></i>
+                            <h3>Нет водительских удостоверений</h3>
+                            <p>Добавьте первое водительское удостоверение с помощью кнопки выше.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reports Section -->
+                <div class="content-section" id="reports-section">
+                    <div class="card">
+                        <h2 class="section-title"><i class="fas fa-file-alt"></i> Отчеты</h2>
+                        
+                        <div class="flex" style="margin-bottom: 1.5rem;">
+                            <button class="btn" id="generate-arrest-report-btn"><i class="fas fa-handcuffs"></i> Сформировать отчет об арестах</button>
+                            <button class="btn" id="generate-accident-report-btn"><i class="fas fa-car-crash"></i> Сформировать отчет о ДТП</button>
+                            <button class="btn" id="generate-actions-report-btn"><i class="fas fa-database"></i> Сформировать общий отчет</button>
+                        </div>
+                        
+                        <div id="reports-container">
+                            <!-- Отчеты будут добавляться сюда -->
+                        </div>
+                        
+                        <div id="reports-empty-state" class="empty-state">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>Нет сформированных отчетов</h3>
+                            <p>Используйте кнопки выше для формирования отчетов.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные кодексов
+        const roadCode = [
+            { article: "1.1.1", violation: "Управление ТС без водительского удостоверения", penalty: "5000-20000" },
+            { article: "1.1.2", violation: "Управление ТС водителем, лишенным права управления", penalty: "25000 или арест" },
+            { article: "1.2.1", violation: "Управление ТС в состоянии алкогольного или иного опьянения", penalty: "10000 + лишение права" },
+            { article: "1.2.2", violation: "Управление ТС в состоянии опьянения без прав или лишенным прав", penalty: "30000 или арест" },
+            { article: "1.2.3", violation: "Отказ от медицинского освидетельствования на состояние опьянения", penalty: "30000 + лишение права" },
+            { article: "1.3", violation: "Управление технически неисправным ТС", penalty: "500-1500 + эвакуация" },
+            { article: "1.4", violation: "Управление ТС без действующего полиса ОСАГО", penalty: "3000" },
+            { article: "1.5", violation: "Управление ТС без регистрационных документов", penalty: "4500 + задержание ТС" },
+            { article: "2.1.1", violation: "Превышение скорости на 20-40 км/ч", penalty: "500" },
+            { article: "2.1.2", violation: "Превышение скорости на 40-60 км/ч", penalty: "1000-1500" },
+            { article: "2.1.3", violation: "Превышение скорости на 60-80 км/ч", penalty: "2000-2500 или лишение права" },
+            { article: "2.1.4", violation: "Превышение скорости более чем на 80 км/ч", penalty: "5000 или лишение права" },
+            { article: "2.1.5", violation: "Повторное нарушение правил скоростного ограничения", penalty: "5500 + лишение права" },
+            { article: "2.2", violation: "Движение без необходимости со слишком малой скоростью", penalty: "1000-1500" },
+            { article: "3.1", violation: "Выезд на встречную полосу для объезда препятствия", penalty: "1500-2000" },
+            { article: "3.2.1", violation: "Выезд на встречную полосу НЕ для объезда препятствия", penalty: "5000 или лишение права" },
+            { article: "3.2.2", violation: "Повторный выезд на встречную полосу НЕ для объезда препятствия", penalty: "6000 + лишение права" },
+            { article: "3.3", violation: "Несоблюдение требований, предписанных дорожными знаками или разметкой", penalty: "1000-1500" },
+            { article: "3.4", violation: "Нарушение правил расположения ТС на проезжей части", penalty: "1500" },
+            { article: "3.5", violation: "Нарушение правил остановки или стоянки", penalty: "2000-3500" },
+            { article: "3.6", violation: "Опасное вождение", penalty: "5000" },
+            { article: "3.7", violation: "Нарушение правил проезда перекрестков", penalty: "1000" },
+            { article: "3.8", violation: "Невыполнение требования ПДД уступить дорогу", penalty: "1500-2500" },
+            { article: "3.9", violation: "Нарушение правил поворота или разворота", penalty: "1000-1500" },
+            { article: "3.10", violation: "Невключение или несвоевременное выключение указателей поворота", penalty: "500" },
+            { article: "3.11", violation: "Движение задним ходом в запрещенных местах", penalty: "2000" },
+            { article: "4.1.1", violation: "Участие в ДТП (с причинением легкого/среднего вреда здоровью)", penalty: "5000-15000 или лишение права" },
+            { article: "4.1.2", violation: "Оставление места ДТП участником", penalty: "20000 + лишение права" },
+            { article: "4.2", violation: "Негорящие (неисправные) фары и габаритные огни", penalty: "500" },
+            { article: "4.3", violation: "Нарушение правил перевозки грузов", penalty: "1500-2000" },
+            { article: "4.4", violation: "Загрязнение номерных знаков", penalty: "500" },
+            { article: "5.1.1", violation: "Невыполнение законного требования сотрудника полиции", penalty: "1500-2000" },
+            { article: "5.1.2", violation: "Невыполнение законного требования сотрудника полиции об остановке ТС", penalty: "2000-2500" },
+            { article: "5.2", violation: "Оказание сопротивления или неповиновение законному распоряжению сотрудника полиции", penalty: "3000-5000 или арест" }
+        ];
+
+        const administrativeCode = [
+            { article: "1.1", violation: "Оскорбление, унижение чести в отношении гражданского лица", penalty: "7000-10000" },
+            { article: "1.2", violation: "Клевета", penalty: "10000-12000" },
+            { article: "1.3", violation: "Дискриминация", penalty: "10000" },
+            { article: "1.4", violation: "Мелкое хулиганство", penalty: "5000" },
+            { article: "1.5", violation: "Порча государственного документа", penalty: "5000-10000" },
+            { article: "2.1", violation: "Организация несанкционированного публичного собрания", penalty: "20000 и арест" },
+            { article: "2.2", violation: "Участие в несанкционированном публичном собрании", penalty: "5000 или арест" },
+            { article: "2.3", violation: "Громкое прослушивание музыки после 23:00", penalty: "6500" },
+            { article: "2.4", violation: "Организация блокирования транспортных коммуникаций", penalty: "12500" },
+            { article: "2.5", violation: "Нарушение правил перевозки оружия", penalty: "20000 и конфискация" },
+            { article: "2.6", violation: "Нарушение общественного порядка", penalty: "8000 или арест" },
+            { article: "3.1", violation: "Заведомо ложный вызов специализированных служб", penalty: "30000" },
+            { article: "3.2", violation: "Применение насилия в отношении представителя власти", penalty: "10000 и арест" },
+            { article: "3.3", violation: "Оскорбление представителя власти", penalty: "15000" }
+        ];
+
+        const criminalCode = [
+            { article: "1.1", violation: "Убийство", penalty: "Пожизненное лишение свободы" },
+            { article: "1.2", violation: "Убийство по неосторожности", penalty: "Лишение свободы на 5 лет" },
+            { article: "1.3", violation: "Умышленное причинение тяжкого вреда здоровью", penalty: "Лишение свободы на 3 года" },
+            { article: "1.4", violation: "Умышленное причинение средней тяжести вреда здоровью", penalty: "Лишение свободы на 2 года" },
+            { article: "1.5", violation: "Умышленное причинение легкого вреда здоровью", penalty: "Лишение свободы на 1 год" },
+            { article: "1.6", violation: "Побои или иные насильственные действия", penalty: "Штраф 12000 и арест" },
+            { article: "1.7", violation: "Угроза убийством или причинением тяжкого вреда здоровью", penalty: "Арест" },
+            { article: "1.8", violation: "Неоказание помощи больному", penalty: "Штраф 18500" },
+            { article: "1.9", violation: "Заведомое оставление без помощи лица", penalty: "Штраф 15000" },
+            { article: "2.1", violation: "Похищение человека", penalty: "Арест" },
+            { article: "2.2", violation: "Незаконное лишение человека свободы", penalty: "Арест" },
+            { article: "2.3", violation: "Клевета", penalty: "Штраф 7800" },
+            { article: "3.1", violation: "Дискриминация", penalty: "По ситуации" },
+            { article: "3.2", violation: "Незаконное собирание или распространение сведений о частной жизни", penalty: "По ситуации" },
+            { article: "3.3", violation: "Нарушение тайны переписки", penalty: "По ситуации" },
+            { article: "3.4", violation: "Незаконное проникновение в жилище", penalty: "По ситуации" },
+            { article: "3.5", violation: "Неправомерный отказ должностного лица", penalty: "По ситуации" },
+            { article: "4.1", violation: "Кража", penalty: "По ситуации" },
+            { article: "4.2", violation: "Грабеж", penalty: "По ситуации" },
+            { article: "4.3", violation: "Разбой", penalty: "По ситуации" },
+            { article: "4.4", violation: "Мошенничество", penalty: "По ситуации" },
+            { article: "4.5", violation: "Вымогательство", penalty: "По ситуации" },
+            { article: "4.6", violation: "Умышленные уничтожение или повреждение чужого имущества", penalty: "По ситуации" },
+            { article: "5.1", violation: "Террористический акт", penalty: "По ситуации" },
+            { article: "5.2", violation: "Содействие террористической деятельности", penalty: "По ситуации" },
+            { article: "5.3", violation: "Несообщение в органы власти о преступлении", penalty: "По ситуации" },
+            { article: "5.4", violation: "Захват или удержание лица в качестве заложника", penalty: "По ситуации" },
+            { article: "5.5", violation: "Заведомо ложное сообщение о готовящихся взрыве", penalty: "По ситуации" },
+            { article: "5.6", violation: "Создание устойчивой вооруженной группы (банды)", penalty: "По ситуации" },
+            { article: "5.7", violation: "Организация преступного сообщества", penalty: "По ситуации" },
+            { article: "5.8", violation: "Занятие высшего положения в преступной иерархии", penalty: "По ситуации" },
+            { article: "5.9", violation: "Организация массовых беспорядков", penalty: "По ситуации" },
+            { article: "5.10", violation: "Хулиганство", penalty: "По ситуации" },
+            { article: "5.11", violation: "Вандализм", penalty: "По ситуации" },
+            { article: "5.12.1", violation: "Незаконное проникновение на охраняемый объект", penalty: "По ситуации" },
+            { article: "5.12.2", violation: "Неоднократное проникновение на служебную территорию", penalty: "По ситуации" },
+            { article: "5.13", violation: "Незаконные приобретение, передача огнестрельного оружия", penalty: "По ситуации" },
+            { article: "5.14", violation: "Незаконные использование или применение огнестрельного оружия", penalty: "По ситуации" },
+            { article: "5.15", violation: "Ношение оружия в открытом виде в общественных местах", penalty: "По ситуации" },
+            { article: "6.1", violation: "Нарушение ПДД, повлекшее тяжкий вред здоровью", penalty: "По ситуации" },
+            { article: "6.2", violation: "Нарушение ПДД, повлекшее смерть", penalty: "По ситуации" },
+            { article: "7.1", violation: "Посягательство на жизнь сотрудника правоохранительного органа", penalty: "По ситуации" },
+            { article: "7.2", violation: "Применения насилия в отношении представителя власти", penalty: "По ситуации" },
+            { article: "7.3", violation: "Оскорбление представителя власти", penalty: "По ситуации" },
+            { article: "8.1.1", violation: "Заведомо ложный донос о совершении преступления", penalty: "По ситуации" },
+            { article: "8.1.2", violation: "Дача заведомо ложных показаний при допросе", penalty: "По ситуации" },
+            { article: "8.1.3", violation: "Дача заведомо ложных показаний в суде", penalty: "По ситуации" },
+            { article: "8.2.1", violation: "Неуважение к суду", penalty: "Штраф 20000" },
+            { article: "8.2.2", violation: "Оскорбление судьи, присяжного заседателя", penalty: "Штраф 25000 или арест" },
+            { article: "8.3", violation: "Укрывательство от преступлений", penalty: "По ситуации" },
+            { article: "8.4", violation: "Побег из места лишения свободы", penalty: "По ситуации" },
+            { article: "9.1", violation: "Вооруженный мятеж", penalty: "По ситуации" },
+            { article: "9.2", violation: "Превышение должностных полномочий", penalty: "По ситуации" },
+            { article: "9.3", violation: "Незаконное присвоение звания", penalty: "По ситуации" },
+            { article: "9.4", violation: "Получение взятки", penalty: "По ситуации" },
+            { article: "9.5", violation: "Дача взятки", penalty: "По ситуации" },
+            { article: "9.6", violation: "Халатность", penalty: "По ситуации" },
+            { article: "9.7", violation: "Разглашение государственной тайны", penalty: "По ситуации" },
+            { article: "10.1", violation: "Незаконные изготовление, приобретение, продажа, хранение наркотических веществ", penalty: "По ситуации" },
+            { article: "10.2", violation: "Незаконные приобретение, хранение, перевозка наркотических средств", penalty: "Штраф 10000 + арест" }
+        ];
+
+        // Категории ВУ
+        const licenseCategories = ["A", "A1", "M", "B", "B1", "C", "D"];
+
+        // Глобальные переменные для хранения данных
+        let actions = JSON.parse(localStorage.getItem('mvd_actions')) || [];
+        let licenses = JSON.parse(localStorage.getItem('mvd_licenses')) || [];
+        let reports = JSON.parse(localStorage.getItem('mvd_reports')) || [];
+        let currentGameDay = parseInt(localStorage.getItem('mvd_current_game_day')) || 1;
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Установка текущего игрового дня
+            document.getElementById('current-game-day').value = currentGameDay;
+            
+            // Инициализация навигации
+            initNavigation();
+            
+            // Инициализация служебного портала
+            initServicePortal();
+            
+            // Заполнение списков кодексов
+            populateCodexLists();
+            
+            // Загрузка данных в таблицы
+            loadActionsTable();
+            loadLicensesTable();
+            loadReports();
+            
+            // Обновление статистики
+            updateStats();
+            
+            // Загрузка недавних действий
+            loadRecentActions();
+        });
+
+        // Инициализация навигации
+        function initNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Убираем активный класс у всех пунктов меню
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    // Добавляем активный класс текущему пункту
+                    this.classList.add('active');
+                    
+                    // Скрываем все разделы контента
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Показываем выбранный раздел
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(`${sectionId}-section`).classList.add('active');
+                });
+            });
+            
+            // Кнопка "Все действия" на главной
+            document.getElementById('view-all-actions-btn').addEventListener('click', function() {
+                document.querySelector('.menu-item[data-section="actions"]').click();
+            });
+        }
+
+        // Инициализация служебного портала
+        function initServicePortal() {
+            // Проверка пароля
+            const loginBtn = document.getElementById('login-btn');
+            loginBtn.addEventListener('click', function() {
+                const password = document.getElementById('service-password').value;
+                if (password === '121212') {
+                    document.getElementById('password-prompt').classList.add('hidden');
+                    document.getElementById('app-container').classList.remove('hidden');
+                } else {
+                    document.getElementById('password-error').classList.remove('hidden');
+                }
+            });
+            
+            // Обновление игрового дня
+            const updateGameDayBtn = document.getElementById('update-game-day-btn');
+            updateGameDayBtn.addEventListener('click', function() {
+                currentGameDay = parseInt(document.getElementById('current-game-day').value);
+                localStorage.setItem('mvd_current_game_day', currentGameDay);
+                updateStats();
+                loadLicensesTable();
+                showAlert('Игровой день обновлен!', 'success');
+            });
+            
+            // Создание нового действия
+            const newActionBtn = document.getElementById('new-action-btn');
+            newActionBtn.addEventListener('click', function() {
+                const actionType = document.getElementById('action-type').value;
+                hideAllForms();
+                
+                if (actionType === 'vehicle') {
+                    showVehicleForm();
+                } else if (actionType === 'pedestrian') {
+                    showPedestrianForm();
+                } else if (actionType === 'arrest') {
+                    showArrestForm();
+                } else if (actionType === 'accident') {
+                    showAccidentForm();
+                }
+            });
+            
+            // Быстрые действия на главной
+            document.getElementById('new-vehicle-action-btn').addEventListener('click', function() {
+                document.querySelector('.menu-item[data-section="actions"]').click();
+                document.getElementById('action-type').value = 'vehicle';
+                showVehicleForm();
+            });
+            
+            document.getElementById('new-pedestrian-action-btn').addEventListener('click', function() {
+                document.querySelector('.menu-item[data-section="actions"]').click();
+                document.getElementById('action-type').value = 'pedestrian';
+                showPedestrianForm();
+            });
+            
+            document.getElementById('new-arrest-action-btn').addEventListener('click', function() {
+                document.querySelector('.menu-item[data-section="actions"]').click();
+                document.getElementById('action-type').value = 'arrest';
+                showArrestForm();
+            });
+            
+            document.getElementById('new-accident-action-btn').addEventListener('click', function() {
+                document.querySelector('.menu-item[data-section="actions"]').click();
+                document.getElementById('action-type').value = 'accident';
+                showAccidentForm();
+            });
+            
+            // Отмена создания действия
+            const cancelActionBtn = document.getElementById('cancel-action-btn');
+            cancelActionBtn.addEventListener('click', function() {
+                hideAllForms();
+            });
+            
+            // Отмена оформления пешего
+            const cancelPedestrianActionBtn = document.getElementById('cancel-pedestrian-action-btn');
+            cancelPedestrianActionBtn.addEventListener('click', function() {
+                hideAllForms();
+            });
+            
+            // Отмена оформления ареста
+            const cancelArrestActionBtn = document.getElementById('cancel-arrest-action-btn');
+            cancelArrestActionBtn.addEventListener('click', function() {
+                hideAllForms();
+            });
+            
+            // Отмена оформления ДТП
+            const cancelAccidentActionBtn = document.getElementById('cancel-accident-action-btn');
+            cancelAccidentActionBtn.addEventListener('click', function() {
+                hideAllForms();
+            });
+            
+            // Изменение типа действия для ТС
+            const actionTypeSelect = document.getElementById('action-type-select');
+            actionTypeSelect.addEventListener('change', function() {
+                const fineContainer = document.getElementById('fine-amount-container');
+                if (this.value === 'fine') {
+                    fineContainer.style.display = 'block';
+                } else {
+                    fineContainer.style.display = 'none';
+                }
+            });
+            
+            // Изменение типа действия для пешего
+            const pedestrianActionTypeSelect = document.getElementById('pedestrian-action-type');
+            pedestrianActionTypeSelect.addEventListener('change', function() {
+                const fineContainer = document.getElementById('pedestrian-fine-amount-container');
+                if (this.value === 'fine') {
+                    fineContainer.style.display = 'block';
+                } else {
+                    fineContainer.style.display = 'none';
+                }
+            });
+            
+            // Аккордеон для выбора статей для ТС
+            const accordionHeader = document.getElementById('codex-accordion-header');
+            accordionHeader.addEventListener('click', function() {
+                const content = document.getElementById('codex-accordion-content');
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    this.querySelector('span:last-child').textContent = '▲';
+                } else {
+                    content.style.display = 'none';
+                    this.querySelector('span:last-child').textContent = '▼';
+                }
+            });
+            
+            // Аккордеон для выбора статей для пешего
+            const pedestrianAccordionHeader = document.getElementById('pedestrian-codex-accordion-header');
+            pedestrianAccordionHeader.addEventListener('click', function() {
+                const content = document.getElementById('pedestrian-codex-accordion-content');
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    this.querySelector('span:last-child').textContent = '▲';
+                } else {
+                    content.style.display = 'none';
+                    this.querySelector('span:last-child').textContent = '▼';
+                }
+            });
+            
+            // Аккордеон для выбора статей для ареста
+            const arrestAccordionHeader = document.getElementById('arrest-codex-accordion-header');
+            arrestAccordionHeader.addEventListener('click', function() {
+                const content = document.getElementById('arrest-codex-accordion-content');
+                if (content.style.display === 'none') {
+                    content.style.display = 'block';
+                    this.querySelector('span:last-child').textContent = '▲';
+                } else {
+                    content.style.display = 'none';
+                    this.querySelector('span:last-child').textContent = '▼';
+                }
+            });
+            
+            // Поиск по кодексам для ТС
+            const codexSearch = document.getElementById('codex-search');
+            codexSearch.addEventListener('input', function() {
+                filterCodexItems(this.value, 'codex');
+            });
+            
+            // Поиск по кодексам для пешего
+            const pedestrianCodexSearch = document.getElementById('pedestrian-codex-search');
+            pedestrianCodexSearch.addEventListener('input', function() {
+                filterCodexItems(this.value, 'pedestrian');
+            });
+            
+            // Поиск по кодексам для ареста
+            const arrestCodexSearch = document.getElementById('arrest-codex-search');
+            arrestCodexSearch.addEventListener('input', function() {
+                filterCodexItems(this.value, 'arrest');
+            });
+            
+            // Сохранение действия с ТС
+            const vehicleForm = document.getElementById('vehicle-action-form');
+            vehicleForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const action = {
+                    id: document.getElementById('action-id').value || generateId(),
+                    date: document.getElementById('action-date').value,
+                    gameDay: document.getElementById('game-day').value,
+                    type: 'vehicle',
+                    action: document.getElementById('action-type-select').value,
+                    reason: document.getElementById('reason').value,
+                    customReason: document.getElementById('custom-reason').value,
+                    vehicle: {
+                        brand: document.getElementById('vehicle-brand').value,
+                        model: document.getElementById('vehicle-model').value,
+                        color: document.getElementById('vehicle-color').value,
+                        plate: document.getElementById('vehicle-plate').value,
+                        ownership: document.getElementById('vehicle-ownership').value
+                    },
+                    owner: {
+                        name: document.getElementById('owner-name').value,
+                        patronymic: document.getElementById('owner-patronymic').value,
+                        passport: document.getElementById('owner-passport').value,
+                        license: document.getElementById('owner-license').value
+                    },
+                    inspector: document.getElementById('inspector-name').value,
+                    fineAmount: document.getElementById('fine-amount').value || null
+                };
+                
+                // Проверяем, это новое действие или редактирование
+                const existingIndex = actions.findIndex(a => a.id === action.id);
+                if (existingIndex >= 0) {
+                    actions[existingIndex] = action;
+                } else {
+                    actions.push(action);
+                }
+                
+                localStorage.setItem('mvd_actions', JSON.stringify(actions));
+                
+                // Очистка формы
+                vehicleForm.reset();
+                hideAllForms();
+                
+                // Обновление таблицы
+                loadActionsTable();
+                loadRecentActions();
+                
+                // Обновление статистики
+                updateStats();
+                
+                // Показать уведомление
+                showAlert('Действие успешно сохранено!', 'success');
+            });
+            
+            // Сохранение действия с пешим
+            const pedestrianForm = document.getElementById('pedestrian-action-form');
+            pedestrianForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const action = {
+                    id: document.getElementById('pedestrian-action-id').value || generateId(),
+                    date: document.getElementById('pedestrian-action-date').value,
+                    gameDay: document.getElementById('pedestrian-game-day').value,
+                    type: 'pedestrian',
+                    action: document.getElementById('pedestrian-action-type').value,
+                    reason: document.getElementById('pedestrian-reason').value,
+                    customReason: document.getElementById('pedestrian-custom-reason').value,
+                    citizen: {
+                        name: document.getElementById('pedestrian-name').value,
+                        patronymic: document.getElementById('pedestrian-patronymic').value,
+                        passport: document.getElementById('pedestrian-passport').value,
+                        address: document.getElementById('pedestrian-address').value,
+                        description: document.getElementById('pedestrian-description').value
+                    },
+                    inspector: document.getElementById('pedestrian-inspector-name').value,
+                    fineAmount: document.getElementById('pedestrian-fine-amount').value || null
+                };
+                
+                // Проверяем, это новое действие или редактирование
+                const existingIndex = actions.findIndex(a => a.id === action.id);
+                if (existingIndex >= 0) {
+                    actions[existingIndex] = action;
+                } else {
+                    actions.push(action);
+                }
+                
+                localStorage.setItem('mvd_actions', JSON.stringify(actions));
+                
+                // Очистка формы
+                pedestrianForm.reset();
+                hideAllForms();
+                
+                // Обновление таблицы
+                loadActionsTable();
+                loadRecentActions();
+                
+                // Обновление статистики
+                updateStats();
+                
+                // Показать уведомление
+                showAlert('Действие успешно сохранено!', 'success');
+            });
+            
+            // Сохранение протокола ареста
+            const arrestForm = document.getElementById('arrest-action-form');
+            arrestForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const action = {
+                    id: document.getElementById('arrest-action-id').value || generateId(),
+                    date: document.getElementById('arrest-action-date').value,
+                    gameDay: document.getElementById('arrest-game-day').value,
+                    type: 'arrest',
+                    arrestType: document.getElementById('arrest-type').value,
+                    duration: document.getElementById('arrest-duration').value,
+                    reason: document.getElementById('arrest-reason').value,
+                    customReason: document.getElementById('arrest-custom-reason').value,
+                    citizen: {
+                        name: document.getElementById('arrest-name').value,
+                        patronymic: document.getElementById('arrest-patronymic').value,
+                        passport: document.getElementById('arrest-passport').value,
+                        address: document.getElementById('arrest-address').value,
+                        description: document.getElementById('arrest-description').value
+                    },
+                    location: document.getElementById('arrest-location').value,
+                    circumstances: document.getElementById('arrest-circumstances').value,
+                    evidence: document.getElementById('arrest-evidence').value,
+                    inspector: document.getElementById('arrest-inspector-name').value
+                };
+                
+                // Проверяем, это новое действие или редактирование
+                const existingIndex = actions.findIndex(a => a.id === action.id);
+                if (existingIndex >= 0) {
+                    actions[existingIndex] = action;
+                } else {
+                    actions.push(action);
+                }
+                
+                localStorage.setItem('mvd_actions', JSON.stringify(actions));
+                
+                // Очистка формы
+                arrestForm.reset();
+                hideAllForms();
+                
+                // Обновление таблицы
+                loadActionsTable();
+                loadRecentActions();
+                
+                // Обновление статистики
+                updateStats();
+                
+                // Показать уведомление
+                showAlert('Протокол ареста успешно сохранен!', 'success');
+            });
+            
+            // Сохранение протокола ДТП
+            const accidentForm = document.getElementById('accident-action-form');
+            accidentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const participants = [];
+                // Собираем данные участников (в реальной системе нужно динамически собирать всех участников)
+                if (document.getElementById('participant1-name').value) {
+                    participants.push({
+                        name: document.getElementById('participant1-name').value,
+                        patronymic: document.getElementById('participant1-patronymic').value,
+                        vehicle: document.getElementById('participant1-vehicle').value,
+                        role: document.getElementById('participant1-role').value,
+                        violations: document.getElementById('participant1-violations').value
+                    });
+                }
+                
+                const action = {
+                    id: document.getElementById('accident-action-id').value || generateId(),
+                    date: document.getElementById('accident-action-date').value,
+                    time: document.getElementById('accident-time').value,
+                    gameDay: document.getElementById('accident-game-day').value,
+                    type: 'accident',
+                    severity: document.getElementById('accident-severity').value,
+                    accidentType: document.getElementById('accident-type').value,
+                    location: document.getElementById('accident-location').value,
+                    participants: participants,
+                    description: document.getElementById('accident-description').value,
+                    damages: document.getElementById('accident-damages').value,
+                    injuries: document.getElementById('accident-injuries').value,
+                    inspector: document.getElementById('accident-inspector-name').value
+                };
+                
+                // Проверяем, это новое действие или редактирование
+                const existingIndex = actions.findIndex(a => a.id === action.id);
+                if (existingIndex >= 0) {
+                    actions[existingIndex] = action;
+                } else {
+                    actions.push(action);
+                }
+                
+                localStorage.setItem('mvd_actions', JSON.stringify(actions));
+                
+                // Очистка формы
+                accidentForm.reset();
+                hideAllForms();
+                
+                // Обновление таблицы
+                loadActionsTable();
+                loadRecentActions();
+                
+                // Обновление статистики
+                updateStats();
+                
+                // Показать уведомление
+                showAlert('Протокол ДТП успешно сохранен!', 'success');
+            });
+            
+            // Добавление участника ДТП
+            const addParticipantBtn = document.getElementById('add-participant-btn');
+            addParticipantBtn.addEventListener('click', function() {
+                const participantsContainer = document.getElementById('accident-participants');
+                const participantCount = participantsContainer.children.length + 1;
+                
+                const participantHTML = `
+                    <div class="participant-section">
+                        <h4>Участник ${participantCount}</h4>
+                        <div class="flex">
+                            <div class="form-group flex-1">
+                                <label for="participant${participantCount}-name">Имя *</label>
+                                <input type="text" id="participant${participantCount}-name" required>
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="participant${participantCount}-patronymic">Отчество *</label>
+                                <input type="text" id="participant${participantCount}-patronymic" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="participant${participantCount}-vehicle">Транспортное средство</label>
+                            <input type="text" id="participant${participantCount}-vehicle" placeholder="Марка, модель, госномер">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="participant${participantCount}-role">Роль в ДТП *</label>
+                            <select id="participant${participantCount}-role" required>
+                                <option value="">Выберите роль</option>
+                                <option value="driver">Водитель</option>
+                                <option value="pedestrian">Пешеход</option>
+                                <option value="passenger">Пассажир</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="participant${participantCount}-violations">Нарушения ПДД</label>
+                            <textarea id="participant${participantCount}-violations" rows="2" placeholder="Выявленные нарушения"></textarea>
+                        </div>
+                        
+                        <button type="button" class="btn btn-danger remove-participant-btn"><i class="fas fa-times"></i> Удалить участника</button>
+                    </div>
+                `;
+                
+                participantsContainer.insertAdjacentHTML('beforeend', participantHTML);
+                
+                // Добавляем обработчик для кнопки удаления
+                const removeButtons = document.querySelectorAll('.remove-participant-btn');
+                removeButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        this.closest('.participant-section').remove();
+                    });
+                });
+            });
+            
+            // Очистка истории
+            const clearHistoryBtn = document.getElementById('clear-history-btn');
+            clearHistoryBtn.addEventListener('click', function() {
+                const password = prompt('Введите пароль для очистки истории:');
+                if (password === '121212') {
+                    actions = [];
+                    localStorage.setItem('mvd_actions', JSON.stringify(actions));
+                    loadActionsTable();
+                    loadRecentActions();
+                    updateStats();
+                    showAlert('История очищена!', 'success');
+                } else {
+                    showAlert('Неверный пароль!', 'error');
+                }
+            });
+            
+            // Добавление ВУ
+            const addLicenseBtn = document.getElementById('add-license-btn');
+            addLicenseBtn.addEventListener('click', function() {
+                showLicenseForm();
+            });
+            
+            // Отмена добавления ВУ
+            const cancelLicenseBtn = document.getElementById('cancel-license-btn');
+            cancelLicenseBtn.addEventListener('click', function() {
+                document.getElementById('license-form').classList.add('hidden');
+            });
+            
+            // Сохранение ВУ
+            const licenseForm = document.getElementById('license-data-form');
+            licenseForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedCategories = Array.from(document.querySelectorAll('input[name="license-category"]:checked'))
+                    .map(cb => cb.value);
+                
+                const license = {
+                    id: document.getElementById('license-id').value || generateId(),
+                    name: document.getElementById('license-name').value,
+                    patronymic: document.getElementById('license-patronymic').value,
+                    passport: document.getElementById('license-passport').value,
+                    number: document.getElementById('license-number').value,
+                    issueDate: document.getElementById('license-issue-date').value,
+                    issueGameDay: document.getElementById('license-issue-game-day').value,
+                    validDate: document.getElementById('license-valid-date').value,
+                    validGameDay: document.getElementById('license-valid-game-day').value,
+                    categories: selectedCategories,
+                    status: document.getElementById('license-status').value
+                };
+                
+                // Проверяем, это новое ВУ или редактирование
+                const existingIndex = licenses.findIndex(l => l.id === license.id);
+                if (existingIndex >= 0) {
+                    licenses[existingIndex] = license;
+                } else {
+                    licenses.push(license);
+                }
+                
+                localStorage.setItem('mvd_licenses', JSON.stringify(licenses));
+                
+                // Очистка формы
+                licenseForm.reset();
+                document.getElementById('license-form').classList.add('hidden');
+                
+                // Обновление таблицы
+                loadLicensesTable();
+                
+                // Обновление статистики
+                updateStats();
+                
+                // Показать уведомление
+                showAlert('Водительское удостоверение успешно сохранено!', 'success');
+            });
+            
+            // Поиск по ВУ
+            const licenseSearch = document.getElementById('license-search');
+            licenseSearch.addEventListener('input', function() {
+                filterLicensesTable(this.value);
+            });
+            
+            // Проверка ВУ
+            const checkLicenseBtn = document.getElementById('check-license-btn');
+            checkLicenseBtn.addEventListener('click', function() {
+                const licenseNumber = document.getElementById('owner-license').value;
+                if (!licenseNumber) {
+                    showAlert('Введите номер водительского удостоверения', 'error');
+                    return;
+                }
+                
+                const license = licenses.find(l => l.number === licenseNumber);
+                const resultDiv = document.getElementById('license-check-result');
+                
+                if (license) {
+                    const isValid = checkLicenseValidity(license);
+                    const statusText = isValid ? 'действительно' : 'недействительно';
+                    resultDiv.innerHTML = `
+                        <div class="alert ${isValid ? 'alert-success' : 'alert-error'}">
+                            <i class="fas fa-${isValid ? 'check-circle' : 'exclamation-circle'}"></i>
+                            <div>
+                                <strong>ВУ найдено:</strong> ${license.name} ${license.patronymic}<br>
+                                <strong>№ паспорта:</strong> ${license.passport}<br>
+                                <strong>Действительно до:</strong> ${license.validDate} (игр. день: ${license.validGameDay})<br>
+                                <strong>Категории:</strong> ${license.categories.join(', ')}<br>
+                                <strong>Статус:</strong> <span class="status-badge ${isValid ? 'status-active' : 'status-inactive'}">${statusText}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                Водительское удостоверение с номером ${licenseNumber} не найдено в базе данных.
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            // Генерация отчета об арестах
+            const generateArrestReportBtn = document.getElementById('generate-arrest-report-btn');
+            generateArrestReportBtn.addEventListener('click', function() {
+                generateArrestReport();
+            });
+            
+            // Генерация отчета о ДТП
+            const generateAccidentReportBtn = document.getElementById('generate-accident-report-btn');
+            generateAccidentReportBtn.addEventListener('click', function() {
+                generateAccidentReport();
+            });
+            
+            // Генерация общего отчета
+            const generateActionsReportBtn = document.getElementById('generate-actions-report-btn');
+            generateActionsReportBtn.addEventListener('click', function() {
+                generateActionsReport();
+            });
+        }
+
+        // Заполнение списков кодексов
+        function populateCodexLists() {
+            const dkList = document.getElementById('dk-list');
+            const koapList = document.getElementById('koap-list');
+            const ukList = document.getElementById('uk-list');
+            
+            const pedestrianKoapList = document.getElementById('pedestrian-koap-list');
+            const pedestrianUkList = document.getElementById('pedestrian-uk-list');
+            
+            const arrestKoapList = document.getElementById('arrest-koap-list');
+            const arrestUkList = document.getElementById('arrest-uk-list');
+            
+            // Дорожный кодекс
+            roadCode.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'codex-item';
+                div.textContent = `${item.article} - ${item.violation} (${item.penalty})`;
+                div.addEventListener('click', function() {
+                    document.getElementById('reason').value = `ДК РФ ст. ${item.article}: ${item.violation}`;
+                    if (document.getElementById('action-type-select').value === 'fine') {
+                        // Извлекаем числовое значение штрафа (если есть)
+                        const penaltyMatch = item.penalty.match(/(\d+)/);
+                        if (penaltyMatch) {
+                            document.getElementById('fine-amount').value = penaltyMatch[1];
+                        }
+                    }
+                    document.getElementById('codex-accordion-content').style.display = 'none';
+                    document.getElementById('codex-accordion-header').querySelector('span:last-child').textContent = '▼';
+                });
+                dkList.appendChild(div);
+            });
+            
+            // КОАП
+            administrativeCode.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'codex-item';
+                div.textContent = `${item.article} - ${item.violation} (${item.penalty})`;
+                div.addEventListener('click', function() {
+                    document.getElementById('reason').value = `КОАП РФ ст. ${item.article}: ${item.violation}`;
+                    if (document.getElementById('action-type-select').value === 'fine') {
+                        // Извлекаем числовое значение штрафа (если есть)
+                        const penaltyMatch = item.penalty.match(/(\d+)/);
+                        if (penaltyMatch) {
+                            document.getElementById('fine-amount').value = penaltyMatch[1];
+                        }
+                    }
+                    document.getElementById('codex-accordion-content').style.display = 'none';
+                    document.getElementById('codex-accordion-header').querySelector('span:last-child').textContent = '▼';
+                });
+                koapList.appendChild(div);
+                
+                // Для пешего
+                const pedestrianDiv = div.cloneNode(true);
+                pedestrianDiv.addEventListener('click', function() {
+                    document.getElementById('pedestrian-reason').value = `КОАП РФ ст. ${item.article}: ${item.violation}`;
+                    if (document.getElementById('pedestrian-action-type').value === 'fine') {
+                        const penaltyMatch = item.penalty.match(/(\d+)/);
+                        if (penaltyMatch) {
+                            document.getElementById('pedestrian-fine-amount').value = penaltyMatch[1];
+                        }
+                    }
+                    document.getElementById('pedestrian-codex-accordion-content').style.display = 'none';
+                    document.getElementById('pedestrian-codex-accordion-header').querySelector('span:last-child').textContent = '▼';
+                });
+                pedestrianKoapList.appendChild(pedestrianDiv);
+                
+                // Для ареста
+                const arrestDiv = div.cloneNode(true);
+                arrestDiv.addEventListener('click', function() {
+                    document.getElementById('arrest-reason').value = `КОАП РФ ст. ${item.article}: ${item.violation}`;
+                    document.getElementById('arrest-codex-accordion-content').style.display = 'none';
+                    document.getElementById('arrest-codex-accordion-header').querySelector('span:last-child').textContent = '▼';
+                });
+                arrestKoapList.appendChild(arrestDiv);
+            });
+            
+            // Уголовный кодекс
+            criminalCode.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'codex-item';
+                div.textContent = `${item.article} - ${item.violation} (${item.penalty})`;
+                div.addEventListener('click', function() {
+                    document.getElementById('reason').value = `УК РФ ст. ${item.article}: ${item.violation}`;
+                    document.getElementById('codex-accordion-content').style.display = 'none';
+                    document.getElementById('codex-accordion-header').querySelector('span:last-child').textContent = '▼';
+                });
+                ukList.appendChild(div);
+                
+                // Для пешего
+                const pedestrianDiv = div.cloneNode(true);
+                pedestrianDiv.addEventListener('click', function() {
+                    document.getElementById('pedestrian-reason').value = `УК РФ ст. ${item.article}: ${item.violation}`;
+                    document.getElementById('pedestrian-codex-accordion-content').style.display = 'none';
+                    document.getElementById('pedestrian-codex-accordion-header').querySelector('span:last-child').textContent = '▼';
+                });
+                pedestrianUkList.appendChild(pedestrianDiv);
+                
+                // Для ареста
+                const arrestDiv = div.cloneNode(true);
+                arrestDiv.addEventListener('click', function() {
+                    document.getElementById('arrest-reason').value = `УК РФ ст. ${item.article}: ${item.violation}`;
+                    document.getElementById('arrest-codex-accordion-content').style.display = 'none';
+                    document.getElementById('arrest-codex-accordion-header').querySelector('span:last-child').textContent = '▼';
+                });
+                arrestUkList.appendChild(arrestDiv);
+            });
+        }
+
+        // Фильтрация статей кодексов
+        function filterCodexItems(searchText, type) {
+            let items;
+            if (type === 'codex') {
+                items = document.querySelectorAll('#codex-accordion-content .codex-item');
+            } else if (type === 'pedestrian') {
+                items = document.querySelectorAll('#pedestrian-codex-accordion-content .codex-item');
+            } else if (type === 'arrest') {
+                items = document.querySelectorAll('#arrest-codex-accordion-content .codex-item');
+            }
+            
+            items.forEach(item => {
+                if (item.textContent.toLowerCase().includes(searchText.toLowerCase())) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Скрыть все формы
+        function hideAllForms() {
+            document.getElementById('vehicle-form').classList.add('hidden');
+            document.getElementById('pedestrian-form').classList.add('hidden');
+            document.getElementById('arrest-form').classList.add('hidden');
+            document.getElementById('accident-form').classList.add('hidden');
+            document.getElementById('license-form').classList.add('hidden');
+        }
+
+        // Показать форму для ТС
+        function showVehicleForm() {
+            hideAllForms();
+            document.getElementById('vehicle-form').classList.remove('hidden');
+            document.getElementById('action-id').value = generateId();
+            document.getElementById('action-date').value = new Date().toLocaleDateString('ru-RU');
+            document.getElementById('game-day').value = currentGameDay;
+        }
+
+        // Показать форму для пешего
+        function showPedestrianForm() {
+            hideAllForms();
+            document.getElementById('pedestrian-form').classList.remove('hidden');
+            document.getElementById('pedestrian-action-id').value = generateId();
+            document.getElementById('pedestrian-action-date').value = new Date().toLocaleDateString('ru-RU');
+            document.getElementById('pedestrian-game-day').value = currentGameDay;
+        }
+
+        // Показать форму для ареста
+        function showArrestForm() {
+            hideAllForms();
+            document.getElementById('arrest-form').classList.remove('hidden');
+            document.getElementById('arrest-action-id').value = generateId();
+            document.getElementById('arrest-action-date').value = new Date().toLocaleDateString('ru-RU');
+            document.getElementById('arrest-game-day').value = currentGameDay;
+        }
+
+        // Показать форму для ДТП
+        function showAccidentForm() {
+            hideAllForms();
+            document.getElementById('accident-form').classList.remove('hidden');
+            document.getElementById('accident-action-id').value = generateId();
+            document.getElementById('accident-action-date').value = new Date().toLocaleDateString('ru-RU');
+            document.getElementById('accident-time').value = new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('accident-game-day').value = currentGameDay;
+        }
+
+        // Показать форму для ВУ
+        function showLicenseForm() {
+            hideAllForms();
+            document.getElementById('license-form').classList.remove('hidden');
+            document.getElementById('license-id').value = generateId();
+            document.getElementById('license-issue-date').value = new Date().toLocaleDateString('ru-RU');
+            document.getElementById('license-issue-game-day').value = currentGameDay;
+            
+            // Устанавливаем дату окончания на 10 лет вперед
+            const futureDate = new Date();
+            futureDate.setFullYear(futureDate.getFullYear() + 10);
+            document.getElementById('license-valid-date').value = futureDate.toLocaleDateString('ru-RU');
+            document.getElementById('license-valid-game-day').value = currentGameDay + 3650;
+        }
+
+        // Загрузка таблицы действий
+        function loadActionsTable() {
+            const tbody = document.querySelector('#actions-table tbody');
+            tbody.innerHTML = '';
+            
+            if (actions.length === 0) {
+                document.getElementById('actions-empty-state').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('actions-empty-state').classList.add('hidden');
+            }
+            
+            actions.forEach(action => {
+                const tr = document.createElement('tr');
+                
+                let objectText = '';
+                if (action.type === 'vehicle') {
+                    objectText = action.vehicle ? `${action.vehicle.brand} ${action.vehicle.model} (${action.vehicle.plate})` : '-';
+                } else if (action.type === 'pedestrian' || action.type === 'arrest') {
+                    objectText = action.citizen ? `${action.citizen.name} ${action.citizen.patronymic}` : '-';
+                } else if (action.type === 'accident') {
+                    objectText = action.location || '-';
+                }
+                
+                tr.innerHTML = `
+                    <td>${action.id}</td>
+                    <td>${action.date}</td>
+                    <td>${getActionTypeText(action.type)}</td>
+                    <td>${getActionText(action)}</td>
+                    <td>${action.reason}</td>
+                    <td>${objectText}</td>
+                    <td>${action.inspector}</td>
+                    <td class="action-buttons">
+                        <button class="btn" onclick="editAction('${action.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" onclick="deleteAction('${action.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Загрузка недавних действий
+        function loadRecentActions() {
+            const tbody = document.querySelector('#recent-actions-table tbody');
+            tbody.innerHTML = '';
+            
+            if (actions.length === 0) {
+                document.getElementById('recent-actions-empty-state').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('recent-actions-empty-state').classList.add('hidden');
+            }
+            
+            // Показать последние 5 действий
+            const recentActions = actions.slice(-5).reverse();
+            
+            recentActions.forEach(action => {
+                const tr = document.createElement('tr');
+                
+                let objectText = '';
+                if (action.type === 'vehicle') {
+                    objectText = action.vehicle ? `${action.vehicle.brand} ${action.vehicle.model} (${action.vehicle.plate})` : '-';
+                } else if (action.type === 'pedestrian' || action.type === 'arrest') {
+                    objectText = action.citizen ? `${action.citizen.name} ${action.citizen.patronymic}` : '-';
+                } else if (action.type === 'accident') {
+                    objectText = action.location || '-';
+                }
+                
+                tr.innerHTML = `
+                    <td>${action.id}</td>
+                    <td>${action.date}</td>
+                    <td>${getActionTypeText(action.type)}</td>
+                    <td>${getActionText(action)}</td>
+                    <td>${objectText}</td>
+                    <td>${action.inspector}</td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Загрузка таблицы ВУ
+        function loadLicensesTable() {
+            const tbody = document.querySelector('#licenses-table tbody');
+            tbody.innerHTML = '';
+            
+            if (licenses.length === 0) {
+                document.getElementById('licenses-empty-state').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('licenses-empty-state').classList.add('hidden');
+            }
+            
+            licenses.forEach(license => {
+                const isValid = checkLicenseValidity(license);
+                const statusText = isValid ? 'Действительно' : 'Недействительно';
+                const statusClass = isValid ? 'status-active' : 'status-inactive';
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${license.number}</td>
+                    <td>${license.name} ${license.patronymic}</td>
+                    <td>${license.passport}</td>
+                    <td>${license.issueDate} (${license.issueGameDay})</td>
+                    <td>${license.validDate} (${license.validGameDay})</td>
+                    <td>
+                        <div class="categories">
+                            ${license.categories.map(cat => `<span class="category">${cat}</span>`).join('')}
+                        </div>
+                    </td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td class="action-buttons">
+                        <button class="btn" onclick="editLicense('${license.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" onclick="deleteLicense('${license.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Загрузка отчетов
+        function loadReports() {
+            const reportsContainer = document.getElementById('reports-container');
+            reportsContainer.innerHTML = '';
+            
+            if (reports.length === 0) {
+                document.getElementById('reports-empty-state').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('reports-empty-state').classList.add('hidden');
+            }
+            
+            // Показать отчеты в обратном порядке (новые сверху)
+            reports.slice().reverse().forEach(report => {
+                const reportCard = document.createElement('div');
+                reportCard.className = 'report-card';
+                reportCard.innerHTML = `
+                    <div class="report-header">
+                        <div class="report-title">${report.title}</div>
+                        <div class="report-meta">${report.date} | Сформировал: ${report.inspector}</div>
+                    </div>
+                    <div class="report-content">
+                        ${report.content}
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-danger" onclick="deleteReport('${report.id}')"><i class="fas fa-trash"></i> Удалить</button>
+                    </div>
+                `;
+                reportsContainer.appendChild(reportCard);
+            });
+        }
+
+        // Фильтрация таблицы ВУ
+        function filterLicensesTable(searchText) {
+            const rows = document.querySelectorAll('#licenses-table tbody tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchText.toLowerCase())) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Обновление статистики
+        function updateStats() {
+            document.getElementById('total-actions').textContent = actions.length;
+            document.getElementById('total-licenses').textContent = licenses.length;
+            
+            const activeLicenses = licenses.filter(license => checkLicenseValidity(license)).length;
+            document.getElementById('active-licenses').textContent = activeLicenses;
+            document.getElementById('expired-licenses').textContent = licenses.length - activeLicenses;
+        }
+
+        // Проверка действительности ВУ
+        function checkLicenseValidity(license) {
+            // Если статус явно установлен как недействительный
+            if (license.status === 'inactive') return false;
+            
+            // Проверка по сроку действия
+            return currentGameDay <= parseInt(license.validGameDay);
+        }
+
+        // Генерация отчета об арестах
+        function generateArrestReport() {
+            const arrestActions = actions.filter(a => a.type === 'arrest');
+            
+            if (arrestActions.length === 0) {
+                showAlert('Нет данных об арестах для формирования отчета', 'error');
+                return;
+            }
+            
+            let content = `
+                <div class="report-section">
+                    <div class="report-label">Общее количество арестов:</div>
+                    <div class="report-value">${arrestActions.length}</div>
+                </div>
+                <div class="report-section">
+                    <div class="report-label">Типы арестов:</div>
+                    <div class="report-value">
+            `;
+            
+            const arrestTypes = {};
+            arrestActions.forEach(action => {
+                if (arrestTypes[action.arrestType]) {
+                    arrestTypes[action.arrestType]++;
+                } else {
+                    arrestTypes[action.arrestType] = 1;
+                }
+            });
+            
+            for (const type in arrestTypes) {
+                content += `<div>${getArrestTypeText(type)}: ${arrestTypes[type]}</div>`;
+            }
+            
+            content += `
+                    </div>
+                </div>
+                <div class="report-section">
+                    <div class="report-label">Последние аресты:</div>
+                    <div class="report-value">
+            `;
+            
+            // Показать последние 5 арестов
+            const recentArrests = arrestActions.slice(-5);
+            recentArrests.forEach(arrest => {
+                content += `<div>${arrest.date} - ${arrest.citizen.name} ${arrest.citizen.patronymic} (${arrest.reason})</div>`;
+            });
+            
+            content += `
+                    </div>
+                </div>
+            `;
+            
+            const report = {
+                id: generateId(),
+                title: 'Отчет об арестах',
+                date: new Date().toLocaleDateString('ru-RU'),
+                inspector: 'Система',
+                content: content
+            };
+            
+            reports.push(report);
+            localStorage.setItem('mvd_reports', JSON.stringify(reports));
+            loadReports();
+            showAlert('Отчет об арестах успешно сформирован!', 'success');
+        }
+
+        // Генерация отчета о ДТП
+        function generateAccidentReport() {
+            const accidentActions = actions.filter(a => a.type === 'accident');
+            
+            if (accidentActions.length === 0) {
+                showAlert('Нет данных о ДТП для формирования отчета', 'error');
+                return;
+            }
+            
+            let content = `
+                <div class="report-section">
+                    <div class="report-label">Общее количество ДТП:</div>
+                    <div class="report-value">${accidentActions.length}</div>
+                </div>
+                <div class="report-section">
+                    <div class="report-label">Тяжесть ДТП:</div>
+                    <div class="report-value">
+            `;
+            
+            const severityCount = {};
+            accidentActions.forEach(action => {
+                if (severityCount[action.severity]) {
+                    severityCount[action.severity]++;
+                } else {
+                    severityCount[action.severity] = 1;
+                }
+            });
+            
+            for (const severity in severityCount) {
+                content += `<div>${getAccidentSeverityText(severity)}: ${severityCount[severity]}</div>`;
+            }
+            
+            content += `
+                    </div>
+                </div>
+                <div class="report-section">
+                    <div class="report-label">Типы ДТП:</div>
+                    <div class="report-value">
+            `;
+            
+            const typeCount = {};
+            accidentActions.forEach(action => {
+                if (typeCount[action.accidentType]) {
+                    typeCount[action.accidentType]++;
+                } else {
+                    typeCount[action.accidentType] = 1;
+                }
+            });
+            
+            for (const type in typeCount) {
+                content += `<div>${getAccidentTypeText(type)}: ${typeCount[type]}</div>`;
+            }
+            
+            content += `
+                    </div>
+                </div>
+                <div class="report-section">
+                    <div class="report-label">Последние ДТП:</div>
+                    <div class="report-value">
+            `;
+            
+            // Показать последние 5 ДТП
+            const recentAccidents = accidentActions.slice(-5);
+            recentAccidents.forEach(accident => {
+                content += `<div>${accident.date} ${accident.time} - ${accident.location} (${getAccidentSeverityText(accident.severity)})</div>`;
+            });
+            
+            content += `
+                    </div>
+                </div>
+            `;
+            
+            const report = {
+                id: generateId(),
+                title: 'Отчет о ДТП',
+                date: new Date().toLocaleDateString('ru-RU'),
+                inspector: 'Система',
+                content: content
+            };
+            
+            reports.push(report);
+            localStorage.setItem('mvd_reports', JSON.stringify(reports));
+            loadReports();
+            showAlert('Отчет о ДТП успешно сформирован!', 'success');
+        }
+
+        // Генерация общего отчета
+        function generateActionsReport() {
+            if (actions.length === 0) {
+                showAlert('Нет данных для формирования отчета', 'error');
+                return;
+            }
+            
+            let content = `
+                <div class="report-section">
+                    <div class="report-label">Общее количество действий:</div>
+                    <div class="report-value">${actions.length}</div>
+                </div>
+                <div class="report-section">
+                    <div class="report-label">Распределение по типам:</div>
+                    <div class="report-value">
+            `;
+            
+            const actionTypes = {};
+            actions.forEach(action => {
+                if (actionTypes[action.type]) {
+                    actionTypes[action.type]++;
+                } else {
+                    actionTypes[action.type] = 1;
+                }
+            });
+            
+            for (const type in actionTypes) {
+                content += `<div>${getActionTypeText(type)}: ${actionTypes[type]}</div>`;
+            }
+            
+            content += `
+                    </div>
+                </div>
+                <div class="report-section">
+                    <div class="report-label">Активность по дням:</div>
+                    <div class="report-value">
+            `;
+            
+            // Группировка по игровым дням
+            const daysActivity = {};
+            actions.forEach(action => {
+                const day = action.gameDay;
+                if (daysActivity[day]) {
+                    daysActivity[day]++;
+                } else {
+                    daysActivity[day] = 1;
+                }
+            });
+            
+            // Показать 5 самых активных дней
+            const sortedDays = Object.keys(daysActivity).sort((a, b) => daysActivity[b] - daysActivity[a]).slice(0, 5);
+            sortedDays.forEach(day => {
+                content += `<div>День ${day}: ${daysActivity[day]} действий</div>`;
+            });
+            
+            content += `
+                    </div>
+                </div>
+            `;
+            
+            const report = {
+                id: generateId(),
+                title: 'Общий отчет по действиям',
+                date: new Date().toLocaleDateString('ru-RU'),
+                inspector: 'Система',
+                content: content
+            };
+            
+            reports.push(report);
+            localStorage.setItem('mvd_reports', JSON.stringify(reports));
+            loadReports();
+            showAlert('Общий отчет успешно сформирован!', 'success');
+        }
+
+        // Вспомогательные функции
+        function generateId() {
+            return 'ID-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        function getActionTypeText(type) {
+            const types = {
+                'vehicle': 'ТС',
+                'pedestrian': 'Пеший',
+                'arrest': 'Арест',
+                'accident': 'ДТП'
+            };
+            return types[type] || type;
+        }
+
+        function getActionText(action) {
+            if (action.type === 'vehicle') {
+                const actions = {
+                    'stop': 'Остановка Т/С',
+                    'fine': 'Административный штраф',
+                    'license-revoke': 'Лишение водительского удостоверения'
+                };
+                return actions[action.action] || action.action;
+            } else if (action.type === 'pedestrian') {
+                const actions = {
+                    'check': 'Проверка документов',
+                    'fine': 'Административный штраф',
+                    'warning': 'Предупреждение',
+                    'detain': 'Задержание'
+                };
+                return actions[action.action] || action.action;
+            } else if (action.type === 'arrest') {
+                return 'Арест';
+            } else if (action.type === 'accident') {
+                return 'Оформление ДТП';
+            }
+            return action.action;
+        }
+
+        function getArrestTypeText(type) {
+            const types = {
+                'administrative': 'Административный арест',
+                'criminal': 'Уголовный арест',
+                'preventive': 'Превентивный арест'
+            };
+            return types[type] || type;
+        }
+
+        function getAccidentSeverityText(severity) {
+            const types = {
+                'light': 'Легкое',
+                'medium': 'Среднее',
+                'severe': 'Тяжелое'
+            };
+            return types[severity] || severity;
+        }
+
+        function getAccidentTypeText(type) {
+            const types = {
+                'collision': 'Столкновение',
+                'rollover': 'Опрокидывание',
+                'pedestrian': 'Наезд на пешехода',
+                'obstacle': 'Наезд на препятствие',
+                'other': 'Иной вид ДТП'
+            };
+            return types[type] || type;
+        }
+
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <div>${message}</div>
+            `;
+            
+            document.querySelector('.content-area').insertBefore(alert, document.querySelector('.content-section.active'));
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Функции для работы с действиями
+        function editAction(id) {
+            const action = actions.find(a => a.id === id);
+            if (action) {
+                if (action.type === 'vehicle') {
+                    showVehicleForm();
+                    
+                    // Заполняем форму данными
+                    document.getElementById('action-id').value = action.id;
+                    document.getElementById('action-date').value = action.date;
+                    document.getElementById('game-day').value = action.gameDay;
+                    document.getElementById('action-type-select').value = action.action;
+                    document.getElementById('reason').value = action.reason;
+                    document.getElementById('custom-reason').value = action.customReason || '';
+                    
+                    if (action.vehicle) {
+                        document.getElementById('vehicle-brand').value = action.vehicle.brand;
+                        document.getElementById('vehicle-model').value = action.vehicle.model;
+                        document.getElementById('vehicle-color').value = action.vehicle.color;
+                        document.getElementById('vehicle-plate').value = action.vehicle.plate;
+                        document.getElementById('vehicle-ownership').value = action.vehicle.ownership;
+                    }
+                    
+                    if (action.owner) {
+                        document.getElementById('owner-name').value = action.owner.name;
+                        document.getElementById('owner-patronymic').value = action.owner.patronymic;
+                        document.getElementById('owner-passport').value = action.owner.passport;
+                        document.getElementById('owner-license').value = action.owner.license || '';
+                    }
+                    
+                    document.getElementById('inspector-name').value = action.inspector;
+                    
+                    if (action.fineAmount) {
+                        document.getElementById('fine-amount').value = action.fineAmount;
+                        document.getElementById('fine-amount-container').style.display = 'block';
+                    }
+                } else if (action.type === 'pedestrian') {
+                    showPedestrianForm();
+                    
+                    // Заполняем форму данными
+                    document.getElementById('pedestrian-action-id').value = action.id;
+                    document.getElementById('pedestrian-action-date').value = action.date;
+                    document.getElementById('pedestrian-game-day').value = action.gameDay;
+                    document.getElementById('pedestrian-action-type').value = action.action;
+                    document.getElementById('pedestrian-reason').value = action.reason;
+                    document.getElementById('pedestrian-custom-reason').value = action.customReason || '';
+                    
+                    if (action.citizen) {
+                        document.getElementById('pedestrian-name').value = action.citizen.name;
+                        document.getElementById('pedestrian-patronymic').value = action.citizen.patronymic;
+                        document.getElementById('pedestrian-passport').value = action.citizen.passport;
+                        document.getElementById('pedestrian-address').value = action.citizen.address || '';
+                        document.getElementById('pedestrian-description').value = action.citizen.description || '';
+                    }
+                    
+                    document.getElementById('pedestrian-inspector-name').value = action.inspector;
+                    
+                    if (action.fineAmount) {
+                        document.getElementById('pedestrian-fine-amount').value = action.fineAmount;
+                        document.getElementById('pedestrian-fine-amount-container').style.display = 'block';
+                    }
+                } else if (action.type === 'arrest') {
+                    showArrestForm();
+                    
+                    // Заполняем форму данными
+                    document.getElementById('arrest-action-id').value = action.id;
+                    document.getElementById('arrest-action-date').value = action.date;
+                    document.getElementById('arrest-game-day').value = action.gameDay;
+                    document.getElementById('arrest-type').value = action.arrestType;
+                    document.getElementById('arrest-duration').value = action.duration;
+                    document.getElementById('arrest-reason').value = action.reason;
+                    document.getElementById('arrest-custom-reason').value = action.customReason || '';
+                    
+                    if (action.citizen) {
+                        document.getElementById('arrest-name').value = action.citizen.name;
+                        document.getElementById('arrest-patronymic').value = action.citizen.patronymic;
+                        document.getElementById('arrest-passport').value = action.citizen.passport;
+                        document.getElementById('arrest-address').value = action.citizen.address || '';
+                        document.getElementById('arrest-description').value = action.citizen.description || '';
+                    }
+                    
+                    document.getElementById('arrest-location').value = action.location || '';
+                    document.getElementById('arrest-circumstances').value = action.circumstances || '';
+                    document.getElementById('arrest-evidence').value = action.evidence || '';
+                    document.getElementById('arrest-inspector-name').value = action.inspector;
+                } else if (action.type === 'accident') {
+                    showAccidentForm();
+                    
+                    // Заполняем форму данными (упрощенно, в реальной системе нужно заполнять всех участников)
+                    document.getElementById('accident-action-id').value = action.id;
+                    document.getElementById('accident-action-date').value = action.date;
+                    document.getElementById('accident-time').value = action.time;
+                    document.getElementById('accident-game-day').value = action.gameDay;
+                    document.getElementById('accident-severity').value = action.severity;
+                    document.getElementById('accident-type').value = action.accidentType;
+                    document.getElementById('accident-location').value = action.location;
+                    document.getElementById('accident-description').value = action.description;
+                    document.getElementById('accident-damages').value = action.damages;
+                    document.getElementById('accident-injuries').value = action.injuries;
+                    document.getElementById('accident-inspector-name').value = action.inspector;
+                    
+                    // Заполняем первого участника (упрощенно)
+                    if (action.participants && action.participants.length > 0) {
+                        const participant = action.participants[0];
+                        document.getElementById('participant1-name').value = participant.name;
+                        document.getElementById('participant1-patronymic').value = participant.patronymic;
+                        document.getElementById('participant1-vehicle').value = participant.vehicle;
+                        document.getElementById('participant1-role').value = participant.role;
+                        document.getElementById('participant1-violations').value = participant.violations;
+                    }
+                }
+            }
+        }
+
+        function deleteAction(id) {
+            const password = prompt('Введите пароль для удаления действия:');
+            if (password === '121212') {
+                actions = actions.filter(a => a.id !== id);
+                localStorage.setItem('mvd_actions', JSON.stringify(actions));
+                loadActionsTable();
+                loadRecentActions();
+                updateStats();
+                showAlert('Действие удалено!', 'success');
+            } else {
+                showAlert('Неверный пароль!', 'error');
+            }
+        }
+
+        // Функции для работы с ВУ
+        function editLicense(id) {
+            const license = licenses.find(l => l.id === id);
+            if (license) {
+                showLicenseForm();
+                
+                // Заполняем форму данными
+                document.getElementById('license-id').value = license.id;
+                document.getElementById('license-name').value = license.name;
+                document.getElementById('license-patronymic').value = license.patronymic;
+                document.getElementById('license-passport').value = license.passport;
+                document.getElementById('license-number').value = license.number;
+                document.getElementById('license-issue-date').value = license.issueDate;
+                document.getElementById('license-issue-game-day').value = license.issueGameDay;
+                document.getElementById('license-valid-date').value = license.validDate;
+                document.getElementById('license-valid-game-day').value = license.validGameDay;
+                document.getElementById('license-status').value = license.status;
+                
+                // Снимаем все галочки категорий
+                document.querySelectorAll('input[name="license-category"]').forEach(cb => {
+                    cb.checked = false;
+                });
+                
+                // Ставим галочки на нужные категории
+                license.categories.forEach(cat => {
+                    const checkbox = document.querySelector(`input[name="license-category"][value="${cat}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+        }
+
+        function deleteLicense(id) {
+            const password = prompt('Введите пароль для удаления ВУ:');
+            if (password === '121212') {
+                licenses = licenses.filter(l => l.id !== id);
+                localStorage.setItem('mvd_licenses', JSON.stringify(licenses));
+                loadLicensesTable();
+                updateStats();
+                showAlert('Водительское удостоверение удалено!', 'success');
+            } else {
+                showAlert('Неверный пароль!', 'error');
+            }
+        }
+
+        // Функции для работы с отчетами
+        function deleteReport(id) {
+            const password = prompt('Введите пароль для удаления отчета:');
+            if (password === '121212') {
+                reports = reports.filter(r => r.id !== id);
+                localStorage.setItem('mvd_reports', JSON.stringify(reports));
+                loadReports();
+                showAlert('Отчет удален!', 'success');
+            } else {
+                showAlert('Неверный пароль!', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
